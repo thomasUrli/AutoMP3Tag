@@ -79,7 +79,7 @@ def modifyTag(filepath):
 root = Tk()
 root.withdraw()
 root.update()
-files = filedialog.askopenfilenames(title="Scegli un file", filetypes=(('File Mp3', '*.mp3'),('All files', '*.*')))
+files = filedialog.askopenfilenames(title="Choose a file", filetypes=(('File Mp3', '*.mp3'),('All files', '*.*')))
 list(files)
 
 for file in files:
