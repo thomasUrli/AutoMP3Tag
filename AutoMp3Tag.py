@@ -1,6 +1,5 @@
 import getpass
 import os
-from mutagen.mp3 import MP3
 from mutagen.id3 import ID3NoHeaderError, ID3, APIC, TIT2, TPE1, TALB
 from tkinter import Tk
 from tkinter import filedialog
@@ -8,7 +7,8 @@ from tkinter import filedialog
 osuser = getpass.getuser()
 imgsize = "512"
 
-def modifyTag(filepath):
+
+def modify_tag(filepath):
     name = os.path.split(filepath)[1]
     name = name.partition(' - ')
     name = list(name)
@@ -27,27 +27,28 @@ def modifyTag(filepath):
         file = ID3()
         tags=False
 
-    if osuser == "thomas":
-        try:
-            if tags:
-                if str(file["APIC:"].data).__contains__("b"):
-                    pass
-
-            else:
-                raise Exception
-
-        except (KeyError, TypeError, Exception):
-            print("\nDownloading cover art...")
-            os.system("sacad "+"\""+str(artist)+"\""+" \""+title+"\""+" \""+imgsize+"\""+" \""+os.path.join(downdir, "cover.jpg")+"\""+" -d")
-
-            try:
-                image = open(os.path.join(downdir, "cover.jpg"), 'rb').read()
-                print("Applying cover art...")
-                file.add(APIC(encoding=0, mime="image/jpeg", type=0, desc="", data=image))
-                os.remove(os.path.join(downdir, "cover.jpg"))
-
-            except FileNotFoundError:
-                pass
+    # try:
+    #     if tags:
+    #         if str(file["APIC:"].data).__contains__("b"):
+    #             pass
+    #
+    #     else:
+    #         raise ValueError
+    #
+    # except (KeyError, TypeError, ValueError):
+    #     try:
+    #         print("\nDownloading cover art...")
+    #         os.system("sacad " + "\"" + str(
+    #             artist) + "\"" + " \"" + title + "\"" + " \"" + imgsize + "\"" + " \"" + os.path.join(downdir, "cover.jpg") + "\"" + " -d")
+    #
+    #         with open(os.path.join(downdir, "cover.jpg"), 'rb') as img:
+    #             image_data = img.read()
+    #             print("Applying cover art...")
+    #             file.add(APIC(encoding=0, mime="image/jpeg", type=0, desc="", data=image_data))
+    #             os.remove(os.path.join(downdir, "cover.jpg"))
+    #
+    #     except (FileNotFoundError, Exception):
+    #         pass
 
     try:
         if file["TIT2"] == title:
@@ -76,12 +77,13 @@ def modifyTag(filepath):
     print("Done!")
 
 
-root = Tk()
-root.withdraw()
-root.update()
-files = filedialog.askopenfilenames(title="Choose a file", filetypes=(('File Mp3', '*.mp3'),('All files', '*.*')))
-list(files)
+if __name__ == "__main__":
+    root = Tk()
+    root.withdraw()
+    root.update()
+    files = filedialog.askopenfilenames(title="Choose a file", filetypes=(('MP3 File', '*.mp3'),('All files', '*.*')))
+    list(files)
 
-for file in files:
-    modifyTag(str(file))
+    for file in files:
+        modify_tag(str(file))
 
